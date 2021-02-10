@@ -1,21 +1,21 @@
 # ALF
 
 ## RandomMelodies()
-With *RandomMelodies* you can create some random sequences of notes. You can produce rather a completely random
-melody (*random_stream()*), one with a triangular distribution of pitches (*triangular_stream(mode_pitch)*) or one
-using a control list (*control_stream()*). You pass the configuration parameters to the constructor of *RandomMelodies*
-class (number of notes, number of different durations, control midi pitches list, low pitch limit, hight pitch limit).
-You can see an example here:  
+With *RandomMelodies* you can create some random sequences of notes. You can use the following functions:
+
+- *random_stream(count, durations, low_l, high_l)*: produce a completely random melody of *count* notes, each one
+with one of a desire number of *durations*. The pitches will be between *low_l* and *high_l*.  
+- *triangular_stream(count, durations, low_l, high_l, mode)*: produce a melody its pitch values have a triangular
+distribution, each one with one of a desire number of *durations*.  
+- *control_stream(count, durations, [pitch_values])*: produce a melody choosing the notes randomly from *pitch_values*
+list, each one with one of a desire number of *durations*.  
 
 ``` python
 #import the module
-from randommelodies import RandomMelodies
-
-#create an instance
-rm = RandomMelodies(100,5,[60,66,72,78], 55, 80)
+from randommelodies import RandomMelodies as rm
 
 #call a function
-rm.aleatory_stream()
+rm.aleatory_stream(100, 4, 50, 60)
 ```
 
 Feel free to contact Rodrigo by [mail](mailto:rodrigovalla@protonmail.ch) or reach him in
