@@ -3,22 +3,10 @@
 #Data we need
 note_names = ["Do", "Do#", "Re", "Re#", "Mi", "Fa", "Fa#", "Sol", "Sol#", "La", "Sib", "Si"]
 note_names_dict = {
-	"Do": 0,
-	"Do#": 1,
-	"Reb": 1,
-	"Re": 2,
-	"Re#": 3,
-	"Mib": 3,
-	"Mi": 4,
-	"Fa": 5,
-	"Fa#": 6,
-	"Solb": 6,
-	"Sol": 7,
-	"Sol#": 8,
-	"Lab": 8,
-	"La": 9,
-	"La#": 10,
-	"Sib": 10,
+	"Do": 0, "Do#": 1, "Reb": 1, "Re": 2,
+	"Re#": 3, "Mib": 3, "Mi": 4, "Fa": 5,
+	"Fa#": 6, "Solb": 6, "Sol": 7, "Sol#": 8,
+	"Lab": 8, "La": 9, "La#": 10, "Sib": 10,
 	"Si": 11
 }
 scale_patterns_up = { #Some ascending scale patterns
@@ -36,16 +24,19 @@ scale_patterns_down = { #Some descending scale patterns
 
 #Function to translate note names into numbers
 def translate_note(name):
-	return note_names_dict[name]
+	try:
+		return note_names_dict[name]
+	except:
+		print("I couldn't translate that note!", end="\n")
 
-#Function to print the notes from a scale
-def print_scale(note_list):
-	scale_text = "The notes are: "
+#Function to translate note lists into lists of numbers
+def translate_list(note_list):
+	new_list = []
 	for i in range(len(note_list)):
-		scale_text += note_names[note_list[i]%12] + " "
-	print(scale_text, end="\n")
+		new_list.append(translate_note(note_list[i]))
+	return new_list
 
-#A function to print an ascending scale
+#A function to build an ascending scale
 def scale_up(note, type):
 	first_note = translate_note(note)
 	pattern = scale_patterns_up[type]
@@ -54,7 +45,7 @@ def scale_up(note, type):
 		scale.append(first_note + pattern[i])
 	return scale
 
-#A function to print an descending scale
+#A function to build an descending scale
 def scale_down(note, type):
 	first_note = translate_note(note)
 	pattern = scale_patterns_down[type]
@@ -64,8 +55,39 @@ def scale_down(note, type):
 		scale.append(first_note + pattern[len(pattern)-1-i])
 	return scale
 
-#A function to print a bidirectional scale
+#A function to build a bidirectional scale
 def scale_up_and_down(note, type):
 	scale = scale_up(note, type)
 	scale += scale_down(note, type)
 	return scale
+
+#A function to tranpose notes
+def transpose_notes(note_list, distance):
+	new_list = []
+	for i in range(len(note_list)):
+		new_list.append(note_list[i] + distance)
+	return new_list
+
+#Function to print the notes from a scale
+def print_notes(note_list):
+	scale_text = "The notes are: "
+	for i in range(len(note_list)):
+		scale_text += note_names[note_list[i]%12] + " "
+	print(scale_text, end="\n")
+
+#Function to print an ascending scale
+def print_scale_up(note, type):
+	print_notes(scale_up(note, type))
+
+#A function to print an descending scale
+def print_scale_down(note, type):
+	print_notes(scale_down(note, type))
+
+#A function to print a bidirectional scale
+def print_scale_up_and_down(note, type):
+	print_notes(scale_up_and_down(note, type))
+
+#A function to print transposed notes
+def print_transpose_notes(list, distance):
+	note_list = translate_list(list)
+	print_notes(transpose_notes(note_list, distance))
