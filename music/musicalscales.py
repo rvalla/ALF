@@ -42,7 +42,7 @@ def translate_note(name):
 def print_scale(note_list):
 	scale_text = "The notes are: "
 	for i in range(len(note_list)):
-		scale_text += note_names[note_list[i]] + " "
+		scale_text += note_names[note_list[i]%12] + " "
 	print(scale_text, end="\n")
 
 #A function to print an ascending scale
@@ -51,14 +51,21 @@ def scale_up(note, type):
 	pattern = scale_patterns_up[type]
 	scale = []
 	for i in range(len(pattern)):
-		scale.append((first_note + pattern[i])%12)
-	print_scale(scale)
+		scale.append(first_note + pattern[i])
+	return scale
 
 #A function to print an descending scale
 def scale_down(note, type):
 	first_note = translate_note(note)
 	pattern = scale_patterns_down[type]
 	scale = []
-	for i in range(len(pattern)):
-		scale.append((first_note + pattern[len(pattern)-1-i])%12)
-	print_scale(scale)
+	scale.append(first_note + pattern[0])
+	for i in range(len(pattern) - 1):
+		scale.append(first_note + pattern[len(pattern)-1-i])
+	return scale
+
+#A function to print a bidirectional scale
+def scale_up_and_down(note, type):
+	scale = scale_up(note, type)
+	scale += scale_down(note, type)
+	return scale
