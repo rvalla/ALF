@@ -16,10 +16,10 @@ scale_patterns_up = { #Some ascending scale patterns
 	"melodic": [0,2,3,5,7,9,11],
 }
 scale_patterns_down = { #Some descending scale patterns
-	"major": [0,2,4,5,7,9,11],
-	"antique": [0,2,3,5,7,8,10],
-	"harmonic": [0,2,3,5,7,9,10],
-	"melodic": [0,2,3,5,7,8,10]
+	"major": [0,11,9,7,5,4,2],
+	"antique": [0,10,8,7,5,3,2],
+	"harmonic": [0,10,9,7,5,3,2],
+	"melodic": [0,10,8,7,5,3,2],
 }
 
 #Function to translate note names into numbers
@@ -36,37 +36,30 @@ def translate_list(note_list):
 		new_list.append(translate_note(note_list[i]))
 	return new_list
 
-#A function to build an ascending scale
-def scale_up(note, type):
-	first_note = translate_note(note)
-	pattern = scale_patterns_up[type]
-	scale = []
-	for i in range(len(pattern)):
-		scale.append(first_note + pattern[i])
-	return scale
-
-#A function to build an descending scale
-def scale_down(note, type):
-	first_note = translate_note(note)
-	pattern = scale_patterns_down[type]
-	scale = []
-	scale.append(first_note + pattern[0])
-	for i in range(len(pattern) - 1):
-		scale.append(first_note + pattern[len(pattern)-1-i])
-	return scale
-
-#A function to build a bidirectional scale
-def scale_up_and_down(note, type):
-	scale = scale_up(note, type)
-	scale += scale_down(note, type)
-	return scale
-
 #A function to tranpose notes
 def transpose_notes(note_list, distance):
 	new_list = []
 	for i in range(len(note_list)):
 		new_list.append(note_list[i] + distance)
 	return new_list
+
+#A function to build an ascending scale
+def scale_up(note, type):
+	first_note = translate_note(note)
+	pattern = scale_patterns_up[type]
+	return transpose_notes(pattern, first_note)
+
+#A function to build an descending scale
+def scale_down(note, type):
+	first_note = translate_note(note)
+	pattern = scale_patterns_down[type]
+	return transpose_notes(pattern, first_note)
+
+#A function to build a bidirectional scale
+def scale_up_and_down(note, type):
+	scale = scale_up(note, type)
+	scale += scale_down(note, type)
+	return scale
 
 #Function to print the notes from a scale
 def print_notes(note_list):
