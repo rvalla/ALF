@@ -12,13 +12,30 @@ list, each one with one of a desire number of *durations*.
 
 ``` python
 #import the module
-from randommelodies import RandomMelodies as rm
+import randommelodies as rm
 
 #call a function
 rm.aleatory_stream(100, 4, 50, 60)
 ```
 ## musicalscales.py
 In *musicalscales* the challenge was to create functions to obtain the list of notes of a musical scale.  
+
+## circlemelodies.py
+Functions to make a melody iterating a list of pitches and duration values a complete cycle.
+
+```python
+#import the module
+import circlemelodies as cm
+
+#Take a note list in midi values
+notes = [60, 62, 64, 62, 60]
+
+#Take a duration list in floats (1 is a quarter note)
+durations = [0.5, 0.25, 1, 0.5]
+
+#call the function
+cm.circle_melody(notes, durations)
+```
 
 Feel free to contact Rodrigo by [mail](mailto:rodrigovalla@protonmail.ch) or reach him in
 [telegram](https://t.me/rvalla) or [mastodon](https://fosstodon.org/@rvalla).
