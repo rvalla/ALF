@@ -2,6 +2,8 @@ list = [0,2,4,6,8,10]
 list2 = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
 list3 = [0, 4, 8, 12, 16, 20, 24, 28, 32]
 list4 = [0, 3, 6, 9, 12, 15, 18]
+list5 = ["a", "b", "c", "d", "e", "f", "g"]
+list6 = [1, 3, 4, 6]
 
 try:
 	print("- for i in list:", end="\n")
@@ -57,12 +59,30 @@ except:
 	print("Houston, we have a problem!", end="\n")
 	print("", end="\n")
 
+print("-------------------------------")
+print(len(list)) #Si pongo esto solo dara 6? ok
+print("-------------------------------")
+for i in range(len(list5)): #para ver si le puedo hacer devolver texto a esta bosta adicta a los numeros (debe haber una manera mas facil)
+	print(list5[i])
+print("-------------------------------")
+#para que me devuelva una lista texto en posiciones dadas por otra lista # yeah!! debe haber un modo mas facil seguro jajaj
+for i in list6:
+	print(list5[i])
+
+print("Aqui dejamos de jugar con range(len")
+
+
+
 try:
 	print("- for i in enumerate(list):", end="\n")
 	for i, n in enumerate(list):
 		print(n, end=" ")
-		print(list[i], end="\n")
+		print(i, end=" ") #a ver?
+		#sospecho que n es el valor del objeto lista, i es el orden "enumerado"
+		print(list[i], end="\n") #devuelve objeto en posicion n que esta enumerando. devuelve lo mismo que el bucle anterior no? no me pienso fijar jaja
 	print("", end="\n")
 except:
 	print("Houston, we have a problem!", end="\n")
 	print("", end="\n")
+
+#muy buena propusta para un newbie!!
