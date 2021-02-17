@@ -10,7 +10,7 @@ def quiero_una_escala_con_sost():
         nota_nro = 0
     elif nota1=="Sol":
         nota_nro = 7
-    elif nota1 == "RE":
+    elif nota1 == "Re":
         nota_nro = 2
     elif nota1=="La":
         nota_nro = 9
@@ -20,11 +20,14 @@ def quiero_una_escala_con_sost():
         nota_nro = 11
     elif nota1=="Fa#":
         nota_nro = 6
+        notas[5] = "Mi#"
     elif nota1=="Do#":
         nota_nro = 1
+        notas[0] = "Si#"
 
     for i in mayor:
         escala = ((i + nota_nro) % 12)
+        #print(escala, end=" ")
         print(notas[escala])
 
 
