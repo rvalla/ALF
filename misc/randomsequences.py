@@ -1,12 +1,12 @@
 import random as rd
 
 #Rolling a dice
-def diceroll(f):
+def dice_roll(f):
 	return rd.randint(1,f)
 
 #A sequence of dice rolls
-def dicerolls(n, f):
+def dice_rolls(n, f):
 	l = []
 	for r in range(n):
-		l.append(diceroll(f))
+		l.append(dice_roll(f))
 	return l
