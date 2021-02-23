@@ -11,7 +11,7 @@ elif tipoin == "Menor":
     tipo = Menor
 
 if notain == "Fa" or "Sib" or "Mib" or "Lab" or "Reb" or "Solb" or "Dob" or "Fab":
-    notas = notas2
+    notas = notas2 #Ok, no está mal. Resuelve.
 
 
 def nota_a_numero(nota): #Este está perfecto
@@ -28,7 +28,7 @@ def nota_a_numero(nota): #Este está perfecto
         nota_nro = 2
     elif nota=="Reb":
         nota_nro = 2
-    elif nota=="La":
+    elif nota=="La": #Be careful here. Pasan cosas...
         nota_nro = 9
     elif nota=="Lab":
         nota_nro = 9
@@ -67,12 +67,3 @@ def devuelvo_una_escala(patron):
     return escala
 
 print(devuelvo_una_escala(nuevo_patron(nota_a_numero(notain))))
-
-
-
-
-
-
-
-
-
