@@ -1,47 +1,9 @@
 Mayor = [0, 2, 4, 5, 7, 9, 11]
 Menor = [0, 2, 3, 5, 7, 8, 10]
-#notas = ["Do", "Do#", "Re", "Re#", "Mi", "Fa", "Fa#", "Sol", "Sol#", "La", "La#", "Si"]
-#notas2 = ["Dob", "Do", "Reb", "Re", "Mib", "Mi", "Fa", "Solb", "Sol", "Lab", "La", "Sib"]
 consost = ["Do", "Do#", "Re", "Re#", "Mi", "Fa", "Fa#", "Sol", "Sol#", "La", "La#", "Si"]
 conbem = ["Dob", "Do", "Reb", "Re", "Mib", "Mi", "Fa", "Solb", "Sol", "Lab", "La", "Sib"]
 notain = input("Indica una nota de partida: ")
 tipoin = input("Indicá el tipo de escala: ")
-
-if tipoin == "Mayor": #Bien acá apuntando tipo a la lista patrón
-    tipo = Mayor
-elif tipoin == "Menor":
-    tipo = Menor
-
-"""Este no funciona"""
-#if notain == ["Fa", "Sib", "Mib", "Lab", "Reb", "Solb", "Dob"]:
-#    notas = conbem
-#else:
-#    notas = consost
-
-
-"""este funciona"""
-if notain == "Fa" or notain == "Sib" or notain == "Mib" or notain == "Lab" or notain == "Reb" or notain == "Solb" or notain == "Dob":
-    notas = conbem
-else:
-    notas = consost
-
-"""Este funciona pero hay que activar lineas 3 y 4"""
-#if notain == "Fa":
- #   notas = notas2
-#elif notain == "Sib":
- #   notas = notas2
-#elif notain == "Mib":
- #   notas = notas2
-#elif notain == "Lab":
- #   notas = notas2
-#elif notain == "Reb":
-  #  notas = notas2
-#elif notain == "Solb":
-   # notas = notas2
-#elif notain == "Dob":
-    #notas = notas2
-
-
 
 
 
@@ -49,20 +11,32 @@ def nota_a_numero(nota): #Este está perfecto
     nota_nro = 0
     if nota=="Do":
         nota_nro = 0
+        if tipoin == "Menor": #Salvando Do menor
+            consost[3] = "Mib"
+            consost[8] = "Lab"
+            consost[10] = "Sib"
     elif nota=="Dob":
         nota_nro = 0
+        conbem[5] = "Fab"
     elif nota=="Sol":
         nota_nro = 7
+        if tipoin == "Menor": #Salvando Sol menor
+            consost[3] = "Mib"
+            consost[10] = "Sib"
     elif nota=="Solb":
         nota_nro = 7
     elif nota == "Re":
         nota_nro = 2
+        if tipoin == "Menor":  #Salvando Re menor
+            consost[10] = "Sib"
     elif nota=="Reb":
         nota_nro = 2
-    elif nota=="La": #Be careful here. Pasan cosas... Zafo!!
+    elif nota=="La":
         nota_nro = 9
     elif nota=="Lab":
         nota_nro = 9
+        if tipoin == "Menor": #Salvando Lab menor
+            conbem[5] = "Fab"
     elif nota=="Mi":
         nota_nro = 4
     elif nota=="Mib":
@@ -97,4 +71,22 @@ def devuelvo_una_escala(patron):
        escala.append(armoescala)
     return escala
 
-print(devuelvo_una_escala(nuevo_patron(nota_a_numero(notain))))
+def imprimo_una_escala(nota, modo):
+    if nota == "Fa" or nota == "Sib" or nota == "Mib" or nota == "Lab" or nota == "Reb" or nota == "Solb" or nota == "Dob":
+        global notas
+        notas = conbem
+    else:
+        notas = consost
+
+    if modo == "Mayor":
+        global tipo
+        tipo = Mayor
+    elif tipoin == "Menor":
+        tipo = Menor
+
+    printscale = devuelvo_una_escala(nuevo_patron(nota_a_numero(notain)))
+
+    print(printscale)
+
+
+imprimo_una_escala(notain, tipoin)
