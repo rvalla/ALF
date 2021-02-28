@@ -18,7 +18,8 @@ import randommelodies as rm
 rm.aleatory_stream(100, 4, 50, 60)
 ```
 ## musicalscales.py
-In *musicalscales* the challenge was to create functions to obtain the list of notes of a musical scale.  
+In *musicalscales* the challenge was to create functions to obtain the list of notes of a musical scale. You can see
+other solutions in *BuscarEscalas.py* and *ArmaEscalasNxN.py*...   
 
 ## circlemelodies.py
 Functions to make a melody iterating a list of pitches and duration values a complete cycle.
