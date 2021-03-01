@@ -54,6 +54,8 @@ def tetrachord_M2():
     tono_up(escala[p])
     tono_up(escala[p+1])
     tono_up(escala[p+2])
+    stono_up(escala[p+3])
+
 
 #Tetracordios de la menor antigua
 def tetrachord_m1():
@@ -62,21 +64,73 @@ def tetrachord_m1():
     stono_up(escala[p+1])
     tono_up(escala[p+2])
 
+#Agregue este tatracordio como segundo de la menor antigua para cerrar en octava
+def tetrachord_ma2():
+    p = len(escala) - 1
+    tono_up(escala[p])
+    stono_up(escala[p+1])
+    tono_up(escala[p+2])
+    tono_up(escala[p + 3])
+
 #Segundo tetracordios de la menor armónica
 def tetrachord_m2():
     p = len(escala) - 1
     tono_up(escala[p])
     stono_up(escala[p+1])
     tono_y_medio_up(escala[p+2])
+    stono_up(escala[p+3])
+
+#Primer tetracordio modo Dorico
+def tatrachord_do1():
+    p = len(escala) - 1
+    tono_up(escala[p])
+    stono_up(escala[p + 1])
+    tono_up(escala[p + 2])
+
+#Segundo tetracordio modo Dorico
+def tetrachord_do2():
+    p = len(escala) - 1
+    tono_up(escala[p])
+    tono_up(escala[p +1])
+    stono_up(escala[p + 2])
+    tono_up(escala[p + 3])
+
+#Primer tetracordio modo Frigio
+def tetrachord_fr1():
+    p = len(escala) - 1
+    stono_up(escala[p])
+    tono_up(escala[p + 1])
+    tono_up(escala[p + 2])
+
+#Primer tetracordio modo Lidio
+def tetrachord_li1():
+    p = len(escala) - 1
+    tono_up(escala[p])
+    tono_up(escala[p + 1])
+    tono_up(escala[p + 2])
+
+#Segundo tetracordio modo lidio
+def tetrachord_li2():
+    p = len(escala) - 1
+    stono_up(escala[p])
+    tono_up(escala[p + 1])
+    tono_up(escala[p + 2])
+    stono_up(escala[p + 3])
+
+
+
 
 #Ya tenemos todos los tetracordios
 #Vamos a probar otra forma de llamar funciones... ¡Chan!
 #Nos hacemos un diccionario que mapea nombres de tetracordios con funciones
-tetrachords = {"M1": tetrachord_M1, "M2": tetrachord_M2, "m1": tetrachord_m1, "m2": tetrachord_m2}
+tetrachords = {"M1": tetrachord_M1, "M2": tetrachord_M2, "m1": tetrachord_m1, "m2": tetrachord_m2,
+               "do1": tatrachord_do1, "do2":tetrachord_do2, "ma2": tetrachord_ma2, "fr1": tetrachord_fr1,
+               "Li1": tetrachord_li1, "Li2": tetrachord_li2}
 
 #Otro diccionario que guarda qué tetracordios tiene cada escala
-escalas = {"Mayor": ["M1", "M2"], "Menor Antigua": ["m1", "m1"], "Menor Armónica": ["m1", "m2"],
-			"Menor Melódica": ["m1", "M2"], "Menor Bachiana": ["m1", "M2"]}
+escalas = {"Mayor": ["M1", "M2"], "Menor Antigua": ["m1", "m2"], "Menor Armónica": ["m1", "m2"],
+			"Menor Melódica": ["m1", "M2"], "Menor Bachiana": ["m1", "M2"], "Dórico": ["do1", "do2"],
+           "Frigio": ["fr1", "ma2"], "Lidio": ["Li1", "Li2"], "Mixolidio": ["M1", "do2"]}
 
 #Ojo, esta función sólo va a llamar. Recibe a qué funciones tiene que llamar.
 def construir_escala(tetras):
@@ -90,4 +144,39 @@ def imprimo_escala(modo):
 
 #¡Ojo! Hice trampa y no resolví las escalas descendentes.
 
+#Aca abajo una idea que surgio a partir de pensar en los modos griegos.
+#Pensaba que no necesitamos escribir mas tatracordios porque podemos escribir los modos como una escala mayor
+#transportada. por ejemplo Re dorico es la escala de Do Mayor leida desde el Re y asi con todos los modos
+#Por ejemplo para Sol.  Dorico(escala mayor tono abajo. Fa)
+#                       frigio(idem tercera mayor abajo. Mib)
+#                       Lidio(idem, cuarta j abajo. Re)
+#                       mixolidio(idem 5j. Do)
+#El problema es hacer mover el input ese intervalo hacia abajo, no se me ocurrió un modo de hacerlo sin ensuciar esto
+#que está bastante prolijo. pero dejo esta función que puede dispararte alguna idea incluso nos puede servir para otra cosa.
+#Obviamente si no disparas imprimo_escala antes no hace nada y si lo corres habiendo pedido un modo antes va a tirar fruta
+# yyyyyyyy....... Ya se que es lagra y que hace mas de una cosa, yo escribo para abajo y despues veo!!! jajaa
+def get_scale_modes():
+    largo = len(escala)
+    dorico = []
+    frigio = []
+    lidio = []
+    mixolidio = []
+    for i in range(largo):
+        transp = (i+1)%7
+        dorico.append(escala[transp])
+    print("Dorico: ", dorico)
+    for i in range(largo):
+        transp = (i+2)%7
+        frigio.append(escala[transp])
+    print("Frigio: ", frigio)
+    for i in range(largo):
+        transp = (i+3)%7
+        lidio.append(escala[transp])
+    print("Lidio: ", lidio)
+    for i in range(largo):
+        transp = (i+4)%7
+        mixolidio.append(escala[transp])
+    print("Mixolidio: ", mixolidio)
+
 imprimo_escala(modoin)
+#get_scale_modes()
