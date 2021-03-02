@@ -117,24 +117,62 @@ def tetrachord_li2():
     tono_up(escala[p + 2])
     stono_up(escala[p + 3])
 
+#Para la escala hexafonica sumar dos tetacordios lidios y sacar el ultimo sonido
+def hexafonica():
+    escala.pop(6)
+
+#Para los modos pentatonicos propongo armar escalas mayores o menores antiguas y remover notas de esas escalas.
+#El unico metodo que conozco es el "Pop" y no me deja poner dos posiciones, me lleva dos lineas
+def penta_modo_1():
+    escala.pop(3)
+    escala.pop(5)
+
+def penta_modo_2():
+    escala.pop(1)
+    escala.pop(4)
+
+def penta_modo_3():
+    escala.pop(2)
+    escala.pop(5)
+
+def penta_modo_4():
+    escala.pop(1)
+    escala.pop(3)
+
+def penta_modo_5():
+    escala.pop(2)
+    escala.pop(4)
+
+
+
+
+
+
 #Ya tenemos todos los tetracordios
 #Vamos a probar otra forma de llamar funciones... ¡Chan!
 #Nos hacemos un diccionario que mapea nombres de tetracordios con funciones
 tetrachords = {"M1": tetrachord_M1, "M2": tetrachord_M2, "m1": tetrachord_m1, "m2": tetrachord_m2,
                "do1": tatrachord_do1, "do2":tetrachord_do2, "ma2": tetrachord_ma2, "fr1": tetrachord_fr1,
-               "Li1": tetrachord_li1, "Li2": tetrachord_li2}
+               "Li1": tetrachord_li1, "Li2": tetrachord_li2, "Pent": penta_modo_1, "Pent2": penta_modo_2,
+               "Pent3": penta_modo_3, "Pent4": penta_modo_4, "Pent5": penta_modo_5, "Hex": hexafonica}
 
 #Otro diccionario que guarda qué tetracordios tiene cada escala
-escalas = {"Mayor": ["M1", "M2"], "Menor Antigua": ["m1", "m2"], "Menor Armónica": ["m1", "m2"],
+escalas = {"Mayor": ["M1", "M2"], "Menor Antigua": ["m1", "ma2"], "Menor Armónica": ["m1", "m2"],
 			"Menor Melódica": ["m1", "M2"], "Menor Bachiana": ["m1", "M2"], "Dórico": ["do1", "do2"],
-           "Frigio": ["fr1", "ma2"], "Lidio": ["Li1", "Li2"], "Mixolidio": ["M1", "do2"]}
+           "Frigio": ["fr1", "ma2"], "Lidio": ["Li1", "Li2"], "Mixolidio": ["M1", "do2"],
+           "Pentatonico modo 1": ["M1", "M2", "Pent"], "Pentatonico modo 2": ["m1", "ma2", "Pent2"],
+           "Pentatonico modo 3": ["M1", "M2", "Pent3"], "Pentatonico modo 4": ["m1", "ma2", "Pent4"],
+           "Pentatonico modo 5": ["m1", "ma2", "Pent5"], "Hexafonica": ["Li1", "Li1", "Hex"]}
 
 #Ojo, esta función sólo va a llamar. Recibe a qué funciones tiene que llamar.
 def construir_escala(tetras):
 	for t in tetras:
 		tetrachords[t]() #Acá estamos llamando a las funciones que corresponden
 
-#¡Bajé la función imprimo_escala!
+#Adaptamos la función imprimo_escala para usar la función construir_escala()
+def imprimo_escala(modo):
+    construir_escala(escalas[modo])
+    print(escala)
 
 #¡Ojo! Hice trampa y no resolví las escalas descendentes.
 
@@ -149,17 +187,14 @@ def construir_escala(tetras):
 #que está bastante prolijo. pero dejo esta función que puede dispararte alguna idea incluso nos puede servir para otra cosa.
 #Obviamente si no disparas imprimo_escala antes no hace nada y si lo corres habiendo pedido un modo antes va a tirar fruta
 # yyyyyyyy....... Ya se que es lagra y que hace mas de una cosa, yo escribo para abajo y despues veo!!! jajaa
-
-#Esto es lo que yo hubiera hecho. Aunque seguís desaprovechando el hecho de que las funciones pueden recibir parámetros.
-#Acá está la tuya
 def get_scale_modes():
-    largo = len(escala) #Esto sobra porque la función sólo funciona si recibe listas de 7...
+    largo = len(escala)
     dorico = []
     frigio = []
     lidio = []
     mixolidio = []
     for i in range(largo):
-        transp = (i+1)%7 #¡Porque acá está el 7!
+        transp = (i+1)%7
         dorico.append(escala[transp])
     print("Dorico: ", dorico)
     for i in range(largo):
@@ -175,31 +210,5 @@ def get_scale_modes():
         mixolidio.append(escala[transp])
     print("Mixolidio: ", mixolidio)
 
-#A mí me gusta escribir menos.
-#Primero robamos con otro diccionario
-gregorian_modes = {"Dórico": 1, "Frigio": 2, "Lidio": 3, "Mixolidio": 4}
-
-#Para no hacer lío le paso a la funciónn también la escala
-def get_scale_modes_clean(gregorian_mode, scale):
-	notes = []
-	g = gregorian_modes[gregorian_mode]
-	for i in range(7):
-		notes.append(scale[(i+g)%7])
-	notes.append(notes[0])
-	return notes
-
-#Adaptamos la función imprimo_escala para usar la función construir_escala() y aceptar modos gregorianos
-def imprimo_escala(modo):
-	if modoin in ["Mayor", "Menor Antigua", "Menor Armónica", "Menor Melódica", "Menor Bachiana"]:
-		construir_escala(escalas[modo])
-		print(notain, end=" ")
-		print(modo, end=": ")
-		print(escala, end="\n")
-	else:
-		construir_escala(escalas["Mayor"])
-		print(notain, end=" ")
-		print(modo, end=": ")
-		print(get_scale_modes_clean(modo, escala), end="\n")
-
 imprimo_escala(modoin)
-#get_scale_modes()
+#get_scale_modes()  #No correr con modos pentatonicos ni menores!!! Explotará!!! Idem Hexafonica!
