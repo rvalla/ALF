@@ -231,7 +231,14 @@ def imprimo_escala(modo):
 		construir_escala(escalas["Mayor"])
 		print(notain, end=" ")
 		print(modo, end=": ")
-		print(get_scale_modes_clean(modo, escala), end="\n")
+		print(get_scale_modes_clean(modo, escala), end="\n") #De la manera que usas esta función estas recibiendo el modo
+                                                             #gregoriano "X" con las notas de la tonalidad que pediste.
+                                                             #La idea basica de BuscaEscalas es que pongas la tonica y te de la
+                                                             #escala. Asi, si pones Do Dorico te da re, mi, fa, sol etc y no
+                                                             #Do, Re, Mib, Fa etc. Mi idea sobre la función get_scale_modes era que una vez
+                                                             #que tenias tus escala la hacias girar y te daba los modos posibles. Un resabio de
+                                                             #Un intento original que deje ahi por si servía de algo. la correccion de la funcion esta
+                                                             #genal de todos modos
 
 imprimo_escala(modoin)
 #get_scale_modes()  #No correr con modos pentatonicos ni menores!!! Explotará!!! Idem Hexafonica!
