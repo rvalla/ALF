@@ -20,7 +20,7 @@ note_num = {"Do": [0, 0], "Do#": [0, 1], "Reb": [1, 1], "Re": [1, 2], "Re#": [1,
            "La": [5, 9], "La#": [5, 10], "Sib": [6, 10], "Si": [6, 11], "Dob": [0, 11],
            "Si#": [6, 0]}
 
-# Para que los "Keys" del diccionario puedan ser estos pares de nros deben ser tuplas y no listas. WTFFFFF????
+# Para que los "Keys" del diccionario puedan ser estos pares de nros deben ser tuplas y no listas. WTFFFFF???? Entiendo, no soy especialista en diccionarios.
 num_note = {(0, 0): "Do", (0, 1): "Do#", (1, 1): "Reb", (1, 2): "Re", (1, 3): "Re#",
             (2, 3): "Mib", (2, 4): "Mi", (2, 5):"Mi#", (3, 5): "Fa", (3, 4): "Fab",
             (3, 6): "Fa#", (4, 6): "Solb", (4, 7): "Sol", (4, 8): "Sol#", (5, 8): "Lab",
@@ -28,7 +28,7 @@ num_note = {(0, 0): "Do", (0, 1): "Do#", (1, 1): "Reb", (1, 2): "Re", (1, 3): "R
             (6, 0): "Si#"}
 
 intervals = {"2m": [1, 1], "2M": [1, 2], "3m": [2, 3], "3M": [2, 4], "4J": [3, 5], "5J": [4, 7],
-             "6m": [5, 8], "6M": [5, 9], "7m": [6, 10], "7M": [6, 11], "8J": [7, 0]}
+             "6m": [5, 8], "6M": [5, 9], "7m": [6, 10], "7M": [6, 11], "8J": [0, 0]} #Corrijo el 7 acá
 
 # Agregate unos intervalos si queres, yo ya perdi la vista
 
@@ -36,12 +36,21 @@ num_interval = {(1, 1): "2m", (1, 2): "2M", (2, 3): "3m", (2, 4): "3M", (3, 5): 
                 (5, 8): "6m", (5, 9): "6M", (6, 10): "7m", (6, 11): "7M", (7, 0): "8J"}
 
 class Note:
+    "Acá le podemos poner una linda descripción a la clase"
     # El constructor de la nota toma los dos valores de la lista dentro del diccionario y los separa para poder operar
     # No sera necesario separarlos? en mi cabeza si pero por ahi es al pedo
     def __init__(self, n):
-        nrlist = note_num[n]
+        nrlist = note_num[n] #esta queda como variable auxiliar, mirá que cuando instancies más de 1 cambia y no coincide*
         self.number = nrlist[0]
         self.crom = nrlist[1]
+
+	#* creo que por ahí te conviene o guardar self.tupla con las dos cosas y también lo otro. Y decidir qué llamar según
+	#lo que necesites. Debe ser más rápido consultar un número que un elemento en una tupla. (¿Se dirá tupla?)
+
+	#Bueno, bueno. Estás bien orientado. Pero estos métodos no son lo que creo que necesitás. El metodo interval_up(n)
+	#debería transformar la nota verdaderamente, cambiarle el estado. Cambiar los valores de self.number y self.crom y
+	#no imprimir. De hecho no te conviene imprimir. De última te conviene devolver un string. Devería haber funciones
+	#que cambien el estado de la nota y funciones que la impriman.
 
     # Pavadas que no requieren mucha explicacion
     def interval_up(self, int):
@@ -65,6 +74,14 @@ class Note:
         new_crom = n2.crom - self.crom
         print(num_interval[new_number, new_crom])
 
+    def __str__(self):
+        return "Hola, yo soy una nota" + "\n" \
+               "En este momento soy: " + \
+               str(num_note[self.number, self.crom]) + "\n" + \
+               "Y me encanta..."
+
+
+#Esto lo vas a sacar de aquí... jeje
 # Algunas notas creadas para probar
 do = Note("Do")
 dos = Note("Do#")
