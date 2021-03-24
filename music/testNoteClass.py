@@ -22,6 +22,8 @@ do.interval_up("6M")
 print("-- Volvemos a mirar los atributos de Do:", end="\n")
 print(str(do.number), end="\n")
 print(str(do.crom), end="\n")
+#Acá se pone de manifiesto que la función interval_up no cambia el estado de la nota.
+#De hecho si tenés un objeto Note que primero es do y lo transportás dos eras para arriba va a dar Mi, Mi.
 print("", end="\n")
 
 print("-- La prueba ha concluido", end="\n")
