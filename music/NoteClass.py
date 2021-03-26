@@ -20,6 +20,7 @@ num_interval = {(1, 1): "2m", (1, 2): "2M", (2, 3): "3m", (2, 4): "3M", (3, 5): 
 
 class Note:
     """And Bach said: "Let there be notes"; and there where notes"""
+    #Sublime esta frase acá, qué lindo cuando lees el código de algo y está lleno de sorpresas.
 
     def __init__(self, n):
         self.nrlist = note_num[n]
@@ -27,6 +28,7 @@ class Note:
     def __str__(self):
         return "No se que nombre me pusieron, pero....." + "\n" \
         "estoy segura de que soy un: " + num_note[self.nrlist]
+    #Excelente print
 
     def transpose_up(self, i):
         int_num = intervals[i]
@@ -40,9 +42,12 @@ class Note:
             new_note[0] += 7 #Entonces no me deja hacer estas opercaiones
         if new_note[1] < 0:
             new_note[1] += 12
-        new_note = tuple(new_note) #Y hago esto porque sino el diccionario no camina, tiene que ser una tupla
+        new_note = tuple(new_note) #Y hago esto porque sino el diccionario no camina, tiene que ser una tupla***
         self.nrlist = new_note
-
+        #*** Es porque nombre = [] define una lista. Nombre = () define una tupla. En transpose_up está bien...
+        #Otro tema. El resto de dividir un a número por b es siempre positivo. Así que podés tener una única función
+        #Transpose y pasarle el transporte descendente como número negativo. No entiendo bien por qué en la función
+        #up tomás módulo 7 y 12 y en la función down hacés ese condicional extraño. ¿Querías sumar líneas de código?
 
 class Interval:
     """Then Bach said: "Let there be intervals, an allow the notes to form couples"; and it was so"""
@@ -50,26 +55,28 @@ class Interval:
     def __init__(self, note1, note2):
         self.n1 = Note(note1)
         self.n2 = Note(note2)
+    #Sublime, perfecto. La frase de Bach y el constructor.
 
-    def distance(self,): #Para saber la distancia entre las notas del intervalo
-        dst_num = [(self.n2.nrlist[0] - self.n1.nrlist[0]), (self.n2.nrlist[1] - self.n1.nrlist[1])]
+    def distance(self): #Para saber la distancia entre las notas del intervalo
+        dst_num = [(self.n2.nrlist[0] - self.n1.nrlist[0]), (self.n2.nrlist[1] - self.n1.nrlist[1])] #***
         if dst_num[0] < 0:
             dst_num[0] += 7
         if dst_num[1] < 0:
             dst_num[1] += 12
-        dst_num = tuple(dst_num)
+        dst_num = tuple(dst_num) #Lo mismo que arriba definí una tupla así no tenés que hacer esto.
         dst = num_interval[dst_num]
         return dst
+    #La distancia siempre la podés calcular con la función módulo (en matemática se escribe |x| o acá abs(x)).
+    #Alcanza con que hagas abs(self.n2.nrlist[0]-self.n1.nrlist[0]). Y listo. El valor absoluto es siempre positivo.
 
     def inversion(self):
         inv = (self.n1.nrlist, self.n2.nrlist)
         self.n1 = Note(num_note[inv[1]])
         self.n2 = Note(num_note[inv[0]])
+    #¡Ojo! Acá llamaste a num_note que es un diccionario que está como variable global. Si después metés num_note adentro
+    #de Note vas a putear. Podés hacer un método en note
 
     def __str__(self):
         return "Mis Notas dicen: " + "\n" + str(self.n1) + "\n" + str(self.n2) + "\n" \
                 "y mido una: " + self.distance()
-
-
-
-
+    #Perfecto
