@@ -1,26 +1,9 @@
-# Para entender esta garompa:
-# A pedido del gran maese estamos volviendo a representar las notas con numeros y operar con ellos.
-# A tal fin propongo representarlas con dos numeros como si fueran ccordenadas (aunque no los son, creo)
-# El primer numero del par nos dice el "nombre" de la nota do, re, mi ,fa etc entonces son numeros del 0 al 6
-# El segundo numero nos dice la ubicacion del sonido en el "escpacio cromatico" do, do#, re, re# etc. entonces van
-# del 0 al 11
-# Ergo, por ejemplo la nota Re# va a tener el par de numeros (2, 3) el Mi (2, 5) etc.
-# Esto nos permite operar con estos numeros coordenada subiendo y bajando "nombres de nota" o "espacios cromaticos"
-# muy esoterico pero asi lo imagino yo
+note_num = {"Do": (0, 0), "Do#": (0, 1), "Reb": (1, 1), "Re": (1, 2), "Re#": (1, 3),
+           "Mib": (2, 3), "Mi": (2, 4), "Mi#": (2, 5), "Fa": (3, 5), "Fab": (3, 4),
+           "Fa#": (3, 6), "Solb": (4, 6), "Sol": (4, 7), "Sol#": (4, 8), "Lab": (5, 8),
+           "La": (5, 9), "La#": (5, 10), "Sib": (6, 10), "Si": (6, 11), "Dob": (0, 11),
+           "Si#": (6, 0)}
 
-# Entonces: Habra diccionarios!!! si!!!! que lleven el nombre de la nota a coordenadas y al reves ya que no me gutaria
-# tener que crear una nota que se llame (2,5) prefiero decirle Mi y tampoco me gustaría que el programa me conteste asi.
-# Es una cuestion de buenos modales
-# Hay tambien un diccionario que nos dice que numeros hay que sumar o restar para subir o bajar  determinado intervalo
-# Y otro que hace el camino inverso porquetambien me parecio interesante que tiremos dos notas y nos diga el intervalo.
-
-note_num = {"Do": [0, 0], "Do#": [0, 1], "Reb": [1, 1], "Re": [1, 2], "Re#": [1, 3],
-           "Mib": [2, 3], "Mi": [2, 4], "Mi#": [2, 5], "Fa": [3, 5], "Fab": [3, 4],
-           "Fa#": [3, 6], "Solb": [4, 6], "Sol": [4, 7], "Sol#": [4, 8], "Lab": [5, 8],
-           "La": [5, 9], "La#": [5, 10], "Sib": [6, 10], "Si": [6, 11], "Dob": [0, 11],
-           "Si#": [6, 0]}
-
-# Para que los "Keys" del diccionario puedan ser estos pares de nros deben ser tuplas y no listas. WTFFFFF???? Entiendo, no soy especialista en diccionarios.
 num_note = {(0, 0): "Do", (0, 1): "Do#", (1, 1): "Reb", (1, 2): "Re", (1, 3): "Re#",
             (2, 3): "Mib", (2, 4): "Mi", (2, 5):"Mi#", (3, 5): "Fa", (3, 4): "Fab",
             (3, 6): "Fa#", (4, 6): "Solb", (4, 7): "Sol", (4, 8): "Sol#", (5, 8): "Lab",
@@ -28,73 +11,65 @@ num_note = {(0, 0): "Do", (0, 1): "Do#", (1, 1): "Reb", (1, 2): "Re", (1, 3): "R
             (6, 0): "Si#"}
 
 intervals = {"2m": [1, 1], "2M": [1, 2], "3m": [2, 3], "3M": [2, 4], "4J": [3, 5], "5J": [4, 7],
-             "6m": [5, 8], "6M": [5, 9], "7m": [6, 10], "7M": [6, 11], "8J": [0, 0]} #Corrijo el 7 acá
+             "6m": [5, 8], "6M": [5, 9], "7m": [6, 10], "7M": [6, 11], "8J": [0, 0]}
 
-# Agregate unos intervalos si queres, yo ya perdi la vista
 
 num_interval = {(1, 1): "2m", (1, 2): "2M", (2, 3): "3m", (2, 4): "3M", (3, 5): "4J", (4, 7): "5J",
                 (5, 8): "6m", (5, 9): "6M", (6, 10): "7m", (6, 11): "7M", (7, 0): "8J"}
 
+
 class Note:
-    "Acá le podemos poner una linda descripción a la clase"
-    # El constructor de la nota toma los dos valores de la lista dentro del diccionario y los separa para poder operar
-    # No sera necesario separarlos? en mi cabeza si pero por ahi es al pedo
+    """And Bach said: "Let there be notes"; and there where notes"""
+
     def __init__(self, n):
-        nrlist = note_num[n] #esta queda como variable auxiliar, mirá que cuando instancies más de 1 cambia y no coincide*
-        self.number = nrlist[0]
-        self.crom = nrlist[1]
-
-	#* creo que por ahí te conviene o guardar self.tupla con las dos cosas y también lo otro. Y decidir qué llamar según
-	#lo que necesites. Debe ser más rápido consultar un número que un elemento en una tupla. (¿Se dirá tupla?)
-
-	#Bueno, bueno. Estás bien orientado. Pero estos métodos no son lo que creo que necesitás. El metodo interval_up(n)
-	#debería transformar la nota verdaderamente, cambiarle el estado. Cambiar los valores de self.number y self.crom y
-	#no imprimir. De hecho no te conviene imprimir. De última te conviene devolver un string. Devería haber funciones
-	#que cambien el estado de la nota y funciones que la impriman.
-
-    # Pavadas que no requieren mucha explicacion
-    def interval_up(self, int):
-        int_numbers = intervals[int]
-        new_number = (self.number + int_numbers[0]) % 7
-        new_crom = (self.crom + int_numbers[1]) % 12
-        print(num_note[new_number, new_crom])
-
-    def interval_down(self, int):
-        int_numbers = intervals[int]
-        new_number = self.number - int_numbers[0]
-        if new_number < 0:  # No encontre un modo mas elegante de resolver esto que los condicionales. dibuje maestro
-            new_number += 7
-        new_crom = self.crom - int_numbers[1]
-        if new_crom < 0:
-            new_crom += 12
-        print(num_note[new_number, new_crom])
-
-    def get_interval(self, n2):
-        new_number = n2.number - self.number
-        new_crom = n2.crom - self.crom
-        print(num_interval[new_number, new_crom])
+        self.nrlist = note_num[n]
 
     def __str__(self):
-        return "Hola, yo soy una nota" + "\n" \
-               "En este momento soy: " + \
-               str(num_note[self.number, self.crom]) + "\n" + \
-               "Y me encanta..."
+        return "No se que nombre me pusieron, pero....." + "\n" \
+        "estoy segura de que soy un: " + num_note[self.nrlist]
+
+    def transpose_up(self, i):
+        int_num = intervals[i]
+        new_note = (((self.nrlist[0] + int_num[0]) % 7), ((self.nrlist[1] + int_num[1]) % 12)) #No sabes la de veces que revise los parentesis
+        self.nrlist = new_note
+
+    def transpose_down(self, i):
+        int_num = intervals[i]
+        new_note = [(self.nrlist[0] - int_num[0]), (self.nrlist[1] - int_num[1])] #Lo hago lista porque la tupla es inmutable
+        if new_note[0] < 0:
+            new_note[0] += 7 #Entonces no me deja hacer estas opercaiones
+        if new_note[1] < 0:
+            new_note[1] += 12
+        new_note = tuple(new_note) #Y hago esto porque sino el diccionario no camina, tiene que ser una tupla
+        self.nrlist = new_note
 
 
-#Esto lo vas a sacar de aquí... jeje
-# Algunas notas creadas para probar
-do = Note("Do")
-dos = Note("Do#")
-reb = Note("Reb")
-fa = Note("Fa")
-la = Note("La")
+class Interval:
+    """Then Bach said: "Let there be intervals, an allow the notes to form couples"; and it was so"""
 
-# Algunas llamaditas que hasta aca funcionan no quiero hacer mas pruebas por las dudas
-dos.interval_up("2M")
-do.interval_up("6M")
-fa.interval_up("6M")
-do.interval_up("8J")
-dos.interval_up("8J")
-do.interval_down("3m")
-do.get_interval(fa)
-fa.get_interval(la)
+    def __init__(self, note1, note2):
+        self.n1 = Note(note1)
+        self.n2 = Note(note2)
+
+    def distance(self,): #Para saber la distancia entre las notas del intervalo
+        dst_num = [(self.n2.nrlist[0] - self.n1.nrlist[0]), (self.n2.nrlist[1] - self.n1.nrlist[1])]
+        if dst_num[0] < 0:
+            dst_num[0] += 7
+        if dst_num[1] < 0:
+            dst_num[1] += 12
+        dst_num = tuple(dst_num)
+        dst = num_interval[dst_num]
+        return dst
+
+    def inversion(self):
+        inv = (self.n1.nrlist, self.n2.nrlist)
+        self.n1 = Note(num_note[inv[1]])
+        self.n2 = Note(num_note[inv[0]])
+
+    def __str__(self):
+        return "Mis Notas dicen: " + "\n" + str(self.n1) + "\n" + str(self.n2) + "\n" \
+                "y mido una: " + self.distance()
+
+
+
+
