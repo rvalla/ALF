@@ -27,6 +27,9 @@ mode_int = {"Mayor": ["1", "2M", "3M", "4J", "5J", "6M", "7M", "8J"],
                 "Menor Armónica": ["1", "2M", "3m", "4J", "5J", "6m", "7m", "8J"],
                 "Mayor Mixta Artificial": ["1", "2M", "3M", "4J", "5J", "6m", "7M", "8J"]}
 
+chords_int = {"M": ["1", "3M", "5J"]}
+pos = {"Ef": 0, "6": 1, "6/4": 2}
+
 class Note:
     """And Bach said: "Let there be notes"; and there where notes"""
 
@@ -82,7 +85,7 @@ class Interval:
                 "Y mido una: " + self.distance()
 
 class Scale:
-    """Later Bach created groups of notes and call them "scales" and Bach saw that this was good"""
+    """Later Bach created groups of notes and called them "scales" and Bach saw that this was good"""
 
     def __init__(self, root, mode):
         self.root_name = root #Al final no lo usé
@@ -120,10 +123,30 @@ class Scale:
 
     def print(self): #No lo pude hacer imprimir bien con str.....
         print("Mis notas dicen: ")
-        for i in range(len(self.notes)):
-            print(self.notes[i])
+        for i in self.notes:
+            print(i)
 
+class Chord:
+    """Soon after Bach arranged the notes by thirds, and he was pleased, so he called them "chords" """
 
+    def __init__(self, root, type, p):
+        self.root_name = root
+        self.root = Note(root)
+        self.type = type
+        self.pos = pos[p]
+        self.notes = []
+        for i in chords_int[type]:
+            nn = self.root.create_my(i, "Up")
+            self.notes.append(nn)
+        for i in range(self.pos):
+            self.notes.append(self.notes.pop(0))
 
+    def inv(self, p):
+        self.pos = pos[p]
+        for i in range(self.pos):
+            self.notes.append(self.notes.pop(0))
 
-
+    def print(self):
+        print("Mis notas dicen: ")
+        for i in self.notes:
+            print(i)
