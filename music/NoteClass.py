@@ -99,18 +99,17 @@ class Scale:
             self.notes.append(self.root.create_my(i, "Up"))
 
     def transpose(self, i, d): #Esto es una aberración. Cualquiera...
-        #r = self.root #Al pedo. Querés transportar toda la escala.
-        #r.transpose(i, d) #Claro, también es al pedo
+        #r = self.root #Al pedo. vos y las variables auxiliares...
+        self.root.transpose(i,d) #Así, así... Dale que podés...
         #self.notes.clear() #What? Las notas se saben mover, ¿por qué creas notas de nuevo?
         #Fuck you. Si tus listas tuvieran 100.000 elementos armarías un embotellamiento. Qué piola... Como tenés listas
         #de 7 hacés cualquiera porque total la computadora lo hace rapidísimo...
-        self.root.transpose(i,d)
         for n in self.notes:
-            n.transpose(i,d) #Ya está. Perdón... Debo enfurecer menos.
+            n.transpose(i,d) #Ya está. Perdón... Debo enfurecerme menos.
 
     def change_mode(self, m): #este método debería llamarse change_scale...
         self.mode = m
-        self.notes.clear() #Por este clear digo...
+        self.notes.clear() #Por este clear digo. Igual te lo tomo eh...
         for i in mode_int[self.mode]:
             self.notes.append(self.root.create_my(i, "Up"))
 
@@ -124,7 +123,9 @@ class Scale:
             mode = "Mayor"
             new_root = self.root.create_my("3m", "Up")
             relative = Scale(new_root.name, mode)
-        return relative
+        return relative #***
+    #*** Por alguna razón change_mode() cambia la escala pero relative() devuelve una escala nueva que no es esta.
+    #Me parece incoherente. Acordate cuando lo usés de guardar la escala que devuelve eh... Fijate en testNoteClass.py
 
     def __str__(self): #No lo pude hacer imprimir bien con str..... ¿Llamaste a un método con un nombre que ya existe?***
         m = "Mis notas dicen: " + "\n"
@@ -132,6 +133,7 @@ class Scale:
             m += str(n) + "\n"
         return m #Este método tiene que devolver un string, si no no anda.
         #***print() es una función del lenguaje. Agregaste una de la clase, ok. A la larga te va a marear jajaja.
+        #Bueno, lo arreglé yo jajajaja
 
 class Chord:
     """Soon after Bach arranged the notes by thirds, and he was pleased, so he called them "chords" """
@@ -161,7 +163,7 @@ class Chord:
         self.root.transpose(i,d)
         for n in self.notes:
             n.transpose(i,d)
-    #***Si sumás root a Interval acá puede haber algo de herencia. El método transpose es igual para todos. 
+    #***Si sumás root a Interval acá puede haber algo de herencia. El método transpose es igual para todos.
 
     def __str__(self):
         m = "Mis notas dicen: " + "\n"
