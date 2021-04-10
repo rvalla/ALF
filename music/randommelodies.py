@@ -11,7 +11,7 @@ def random_stream(notes_count, durations, low_limit, high_limit):
 		n = note.Note(random.randint(low_limit, high_limit))
 		n.duration = random.choice(duration_values)
 		note_stream.append(n)
-	note_stream.show()
+	return note_stream
 
 #A function to create a melody with a triangular distribution of pitches
 def triangular_stream(notes_count, durations, low_limit, high_limit, mode_pitch):
@@ -22,7 +22,7 @@ def triangular_stream(notes_count, durations, low_limit, high_limit, mode_pitch)
 			n = note.Note(round(random.triangular(low_limit, high_limit, mode_pitch)))
 			n.duration = random.choice(duration_values)
 			note_stream.append(n)
-		note_stream.show()
+		return note_stream
 	else:
 		print("The mode pitch is out of range!", end="\n")
 
@@ -34,7 +34,7 @@ def control_stream(notes_count, durations, pitch_values):
 		n = note.Note(random.choice(pitch_values))
 		n.duration = random.choice(duration_values)
 		note_stream.append(n)
-	note_stream.show()
+	return note_stream
 
 #Function to create different duration values
 def get_duration_values(count):
