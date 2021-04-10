@@ -1,5 +1,9 @@
 # ALF
 
+## m21Score
+An object util to create a score that allows you to create *musicXML* using the *music21* library. See *test_scores.py*
+to give it a try.
+
 ## randommelodies.py
 With *randommelodies.py* you can create some random sequences of notes. You can use the following functions:
 
