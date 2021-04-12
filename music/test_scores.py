@@ -3,11 +3,10 @@ from scores import m21Score as m21
 
 title = "Esta melodía te vuela la cabeza"
 composer = "Juan Pitón del Bosque"
-copyright = "No tenemos ningún derecho"
 
 #El constructor de la clase m21Score recibe los metadatos y la armadura de clave (entero),
 #el compás (string) y la cantidad de partes.
-score = m21(title, composer, 3, "2/4", 3)
+score = m21(title, composer, 3, "4/4", 3)
 
 #Ahora vamos a probar si realmente funciona.
 score.add_notes_to_part(rmel.random_stream(25, 6, 58, 72), 0)

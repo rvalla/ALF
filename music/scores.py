@@ -8,6 +8,7 @@ class m21Score():
 		self.score.insert(0, metadata.Metadata())
 		self.score.metadata.title = title #Some metadata
 		self.score.metadata.composer = composer
+		self.parts_count = parts_count
 		self.parts = []
 		for p in range(parts_count):
 			self.parts.append(stream.Part()) #Here we create the parts
@@ -21,14 +22,22 @@ class m21Score():
 				+ "-- And " + self.get_notes_count() + " notes" + "\n" \
 				+ "-- I think I sound perfectly."
 
-	#A function to add one note
-	def create_note_in_part(self, midi_v, duration_v, part):
+	#A function to create a note
+	def create_note(self, midi_v, duration_v):
 		try:
 			if midi_v >= 0:
 				n = note.Note(midi_v)
 			else:
 				n = note.Rest()
 			n.duration = duration.Duration(duration_v)
+			return n
+		except:
+			print("-- Explotion. Something went wrong...")
+
+	#A function to add one note
+	def create_note_in_part(self, midi_v, duration_v, part):
+		try:
+			n = self.create_note(midi_v, duration_v)
 			self.parts[part].append(n)
 		except:
 			print("-- Explotion. Something went wrong...")
