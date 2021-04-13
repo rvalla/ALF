@@ -27,7 +27,9 @@ mode_int = {"Mayor": ["1", "2M", "3M", "4J", "5J", "6M", "7M", "8J"],
                 "Menor Armónica": ["1", "2M", "3m", "4J", "5J", "6m", "7m", "8J"],
                 "Mayor Mixta Artificial": ["1", "2M", "3M", "4J", "5J", "6m", "7M", "8J"]}
 
-chords_int = {"Mayor": ["1", "3M", "5J"]}
+chords_int = {"Mayor": ["1", "3M", "5J"], "Menor": ["1", "3m", "5J"], "Aumentado": ["1", "3M", "3M"],
+              "Disminuido": ["1", "3m", "3m"]}
+
 pos = {"Ef": 0, "6": 1, "6/4": 2}
 
 class Note:
@@ -37,12 +39,10 @@ class Note:
         self.nrlist = note_num[n]
         self.name = n
 
-    #Voy a ponerme serio acá así nos sirve... Fue divertido mientras duró.
     def __str__(self):
         return "No se que nombre me pusieron, pero....." + "\n" \
         "estoy segura de que soy un: " + num_note[self.nrlist]
 
-    #Ok. Perdón. Pero cuando los programas crecen hay que ahorrar líneas. Voy a intervenir acá como ejemplo:
     def transpose(self, i, d):
         int_num = intervals[i]
         self.nrlist = ((self.nrlist[0] + (int_num[0] * mod[d])) % 7), ((self.nrlist[1] + (int_num[1] * mod[d])) % 12)
@@ -57,32 +57,29 @@ class Interval:
     """Then Bach said: "Let there be intervals, an allow the notes to form couples"; and it was so"""
 
     def __init__(self, note1, note2, d):
-        self.n1 = Note(note1)
+        self.root = Note(note1)
         self.n2 = Note(note2)
         self.dir = d
 
     def distance(self):
         if self.dir == "Up":
-            dst_num = ((self.n2.nrlist[0] - self.n1.nrlist[0]) % 7), ((self.n2.nrlist[1] - self.n1.nrlist[1]) % 12)
+            dst_num = ((self.n2.nrlist[0] - self.root.nrlist[0]) % 7), ((self.n2.nrlist[1] - self.root.nrlist[1]) % 12)
         if self.dir == "Down":
-            dst_num = ((self.n1.nrlist[0] - self.n2.nrlist[0]) % 7), ((self.n1.nrlist[1] - self.n2.nrlist[1]) % 12)
+            dst_num = ((self.root.nrlist[0] - self.n2.nrlist[0]) % 7), ((self.root.nrlist[1] - self.n2.nrlist[1]) % 12)
         dst = num_interval[dst_num]
-        return dst #Esto no lo estoy usando, lo puse por si hiciera falta. no me imagino ahora para que. lo dejarias?**
-        #MENTIRA: Lo está usando __str__ para imprimir la distancia.
+        return dst
 
     def inversion(self):
-        inv = (self.n1.nrlist, self.n2.nrlist)
-        self.n1 = Note(num_note[inv[1]])
+        inv = (self.root.nrlist, self.n2.nrlist)
+        self.root = Note(num_note[inv[1]])
         self.n2 = Note(num_note[inv[0]])
 
-    #Intervengo acá también. Veo que usás expresiones de igualdad como trocados de contrapunto tonal. Pero la igualdad
-    #es bidireccional. a = b es lo mismo que b = a, no es como en las fugas de Bach.
     def transpose(self, i, d):
-        self.n1.transpose(i, d)
+        self.root.transpose(i, d)
         self.n2.transpose(i, d)
 
     def __str__(self):
-        return "Mis Notas dicen: " + "\n" + str(self.n1) + "\n" + str(self.n2) + "\n" \
+        return "Mis Notas dicen: " + "\n" + str(self.root) + "\n" + str(self.n2) + "\n" \
                 "Mi dirección es: " + self.dir + "\n" \
                 "Y mido una: " + self.distance()
 
@@ -90,7 +87,7 @@ class Scale:
     """Later Bach created groups of notes and called them "scales" and Bach saw that this was good"""
 
     def __init__(self, root, mode):
-        self.root_name = root #Al final no lo usé. Tenés el dato en la primera nota...
+        self.root_name = root
         self.root = Note(root)
         self.mode = mode
         self.mode_int = mode_int[self.mode]
@@ -98,22 +95,18 @@ class Scale:
         for i in mode_int[self.mode]:
             self.notes.append(self.root.create_my(i, "Up"))
 
-    def transpose(self, i, d): #Esto es una aberración. Cualquiera...
-        #r = self.root #Al pedo. vos y las variables auxiliares...
-        self.root.transpose(i,d) #Así, así... Dale que podés...
-        #self.notes.clear() #What? Las notas se saben mover, ¿por qué creas notas de nuevo?
-        #Fuck you. Si tus listas tuvieran 100.000 elementos armarías un embotellamiento. Qué piola... Como tenés listas
-        #de 7 hacés cualquiera porque total la computadora lo hace rapidísimo...
+    def transpose(self, i, d):
+        self.root.transpose(i, d)
         for n in self.notes:
-            n.transpose(i,d) #Ya está. Perdón... Debo enfurecerme menos.
+            n.transpose(i, d)
 
-    def change_mode(self, m): #este método debería llamarse change_scale...
+    def change_mode(self, m):
         self.mode = m
-        self.notes.clear() #Por este clear digo. Igual te lo tomo eh...
+        self.notes.clear()
         for i in mode_int[self.mode]:
             self.notes.append(self.root.create_my(i, "Up"))
 
-    def relative(self): #Epa... Groso
+    def relative(self):
         if self.mode == "Mayor" or self.mode == "Mayor Mixta Artificial":
             mode = "Menor Antigua"
             new_root = self.root.create_my("3m", "Down")
@@ -123,50 +116,85 @@ class Scale:
             mode = "Mayor"
             new_root = self.root.create_my("3m", "Up")
             relative = Scale(new_root.name, mode)
-        return relative #***
-    #*** Por alguna razón change_mode() cambia la escala pero relative() devuelve una escala nueva que no es esta.
-    #Me parece incoherente. Acordate cuando lo usés de guardar la escala que devuelve eh... Fijate en testNoteClass.py
+        return relative
 
-    def __str__(self): #No lo pude hacer imprimir bien con str..... ¿Llamaste a un método con un nombre que ya existe?***
+    def create_scale_chords(self):
+        grades = []
+        chordnotes = []
+        patr = [0, 2, 4]
+        aux = []
+
+        def guess_notes():
+            for i in patr:
+                a = self.notes[i]
+                chordnotes.append(a.name)
+
+        def guess_type(notes):
+            int_chord = {("3M", "5J"): "Mayor", ("3m", "5J"): "Menor", ("3M", "5Aum"): "Aumentado",
+                            ("3m", "5Dim"): "Disminuido"}
+            distances = []
+            a = Interval(notes[0], notes[1], "Up")
+            b = Interval(notes[0], notes[2], "Up")
+            distances.append(a.distance())
+            distances.append(b.distance())
+            distances = tuple(distances)
+            return int_chord[distances]
+
+        def move_patr():
+            for i in patr:
+                aux.append((i + 1) % 7)
+            for i in aux:
+                patr.append(i)
+            del patr[0: 3]
+            aux.clear()
+
+        for i in range(len(self.notes)):
+            guess_notes()
+            i = Chord(chordnotes[0], guess_type(chordnotes), "Ef")
+            grades.append(i)
+            move_patr()
+            chordnotes.clear()
+
+        return grades
+
+    def __str__(self):
         m = "Mis notas dicen: " + "\n"
         for n in self.notes:
             m += str(n) + "\n"
-        return m #Este método tiene que devolver un string, si no no anda.
-        #***print() es una función del lenguaje. Agregaste una de la clase, ok. A la larga te va a marear jajaja.
-        #Bueno, lo arreglé yo jajajaja
+        return m
 
 class Chord:
     """Soon after Bach arranged the notes by thirds, and he was pleased, so he called them "chords" """
 
     def __init__(self, root, type, p):
-        self.root_name = root
         self.root = Note(root)
         self.type = type
-        self.pos = pos[p] #Este número me lo guardo para imprimir nomás
+        self.pos = pos[p]
         self.notes = []
         for i in chords_int[type]:
-            self.notes.append(self.root.create_my(i, "Up")) #Ya está, contá los paréntesis. Es así.
-        self.size = len(self.notes) #Me guardo la cantidad de notas que tiene
-        #A la bosta lo que sigue
-        #for i in range(self.pos):
-        #    self.notes.append(self.notes.pop(0)) #Me dio un isquemia. No sé qué carajo querés acá.
-
-    #def inv(self, p):
-    #    self.pos = pos[p]
-    #    for i in range(self.pos):
-    #        self.notes.append(self.notes.pop(0))
+            self.notes.append(self.root.create_my(i, "Up"))
+        self.size = len(self.notes)
+        for i in range(self.pos):
+            self.notes.append(self.notes.pop(0))
 
     def invert(self, p):
         self.pos = pos[p]
+        self.notes.clear()
+        for i in chords_int[self.type]:
+            self.notes.append(self.root.create_my(i, "Up"))
+        for i in range(self.pos):
+            self.notes.append(self.notes.pop(0))
 
-    def transpose(self, i, d): #Vago, este no puede faltar*** jajajaja
-        self.root.transpose(i,d)
+    def transpose(self, i, d):
+        self.root.transpose(i, d)
         for n in self.notes:
-            n.transpose(i,d)
-    #***Si sumás root a Interval acá puede haber algo de herencia. El método transpose es igual para todos.
+            n.transpose(i, d)
+
 
     def __str__(self):
         m = "Mis notas dicen: " + "\n"
-        for i in range(self.size):
-            m += str(self.notes[(i + self.pos)%self.size]) + "\n"
+        for i in range(len(self.notes)):
+            m += str(self.notes[i]) + "\n"
         return m
+
+

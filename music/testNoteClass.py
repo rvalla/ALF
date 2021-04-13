@@ -58,10 +58,14 @@ print("Creamos la relativa...", end="\n")
 sr = s.relative()
 print(sr)
 print("", end="\n")
+print("Creamos los acordes...", end="\n")
+gr = sr.create_scale_chords
+print(gr)
+print("", end="\n")
 
 print("------------------", end="\n")
 print("Vamos con Chord...", end="\n")
-c = Chord("Sol", "Mayor", "6")
+c = Chord("Sol", "Mayor", "Ef")
 print(c)
 print("", end="\n")
 print("Invertimos el acorde...", end="\n")
@@ -72,6 +76,7 @@ print("Transportamos...", end="\n")
 c.transpose("3M", "Up")
 print(c)
 print("", end="\n")
+a = Chord
 
 print("Hemos concluido la prueba...", end="\n")
 print("Muchas gracias", end="\n")
