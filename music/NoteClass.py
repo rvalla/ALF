@@ -10,11 +10,11 @@ num_note = {(0, 0): "Do", (0, 1): "Do#", (1, 1): "Reb", (1, 2): "Re", (1, 3): "R
             (5, 9): "La", (5, 10): "La#", (6, 10): "Sib", (6, 11): "Si", (0, 11): "Dob",
             (6, 0): "Si#"}
 
-intervals = {"1": [0, 0], "2m": [1, 1], "2M": [1, 2], "3m": [2, 3], "3M": [2, 4], "4J": [3, 5], "5J": [4, 7],
+intervals = {"1": [0, 0], "2m": [1, 1], "2M": [1, 2], "3m": [2, 3], "3M": [2, 4], "4J": [3, 5], "5J": [4, 7], "5Dim": [4,6],
              "6m": [5, 8], "6M": [5, 9], "7m": [6, 10], "7M": [6, 11], "8J": [7, 0]}
 
 
-num_interval = {(1, 1): "2m", (1, 2): "2M", (2, 3): "3m", (2, 4): "3M", (3, 5): "4J", (4, 7): "5J",
+num_interval = {(1, 1): "2m", (1, 2): "2M", (2, 3): "3m", (2, 4): "3M", (3, 5): "4J", (4, 7): "5J", (4, 6): "5Dim",
                 (5, 8): "6m", (5, 9): "6M", (6, 10): "7m", (6, 11): "7M", (7, 0): "8J"}
 
 mod = {"Up": 1, "Down": -1}
@@ -28,7 +28,7 @@ mode_int = {"Mayor": ["1", "2M", "3M", "4J", "5J", "6M", "7M", "8J"],
                 "Mayor Mixta Artificial": ["1", "2M", "3M", "4J", "5J", "6m", "7M", "8J"]}
 
 chords_int = {"Mayor": ["1", "3M", "5J"], "Menor": ["1", "3m", "5J"], "Aumentado": ["1", "3M", "3M"],
-              "Disminuido": ["1", "3m", "3m"]}
+              "Disminuido": ["1", "3m", "5Dim"]}
 
 pos = {"Ef": 0, "6": 1, "6/4": 2}
 
@@ -66,6 +66,7 @@ class Interval:
             dst_num = ((self.n2.nrlist[0] - self.root.nrlist[0]) % 7), ((self.n2.nrlist[1] - self.root.nrlist[1]) % 12)
         if self.dir == "Down":
             dst_num = ((self.root.nrlist[0] - self.n2.nrlist[0]) % 7), ((self.root.nrlist[1] - self.n2.nrlist[1]) % 12)
+        print(dst_num)
         dst = num_interval[dst_num]
         return dst
 
@@ -94,6 +95,7 @@ class Scale:
         self.notes = []
         for i in mode_int[self.mode]:
             self.notes.append(self.root.create_my(i, "Up"))
+        self.grades = self.create_scale_chords() #Ya que lo querés la escala conoce sus grados...
 
     def transpose(self, i, d):
         self.root.transpose(i, d)
@@ -118,42 +120,51 @@ class Scale:
             relative = Scale(new_root.name, mode)
         return relative
 
+    #Andrés wanted to save of chords in a scale so he did this:
     def create_scale_chords(self):
-        grades = []
+        grades = [] #Acá vas a guardar los acordes, ok
         chordnotes = []
-        patr = [0, 2, 4]
-        aux = []
+        patr = [0, 2, 4] #Esta magia se puede aprovechar mejor
+        aux = [] #Podría llamarse "Ouch!"
 
-        def guess_notes():
-            for i in patr:
-                a = self.notes[i]
-                chordnotes.append(a.name)
+        #Ahora hay que recorrer las notas de la escala
+        for i in range(7):
+            notes = []
+            for p in patr:
+                notes.append(self.notes[(i + p)%7].name)
+            grades.append(Chord(notes[0], Chord.guess_type(notes), "Ef"))
 
-        def guess_type(notes):
-            int_chord = {("3M", "5J"): "Mayor", ("3m", "5J"): "Menor", ("3M", "5Aum"): "Aumentado",
-                            ("3m", "5Dim"): "Disminuido"}
-            distances = []
-            a = Interval(notes[0], notes[1], "Up")
-            b = Interval(notes[0], notes[2], "Up")
-            distances.append(a.distance())
-            distances.append(b.distance())
-            distances = tuple(distances)
-            return int_chord[distances]
+        #Esto que sigue se puede borrar...
+        #def guess_notes():
+        #    for i in patr:
+        #        a = self.notes[i]
+        #        chordnotes.append(a.name)
 
-        def move_patr():
-            for i in patr:
-                aux.append((i + 1) % 7)
-            for i in aux:
-                patr.append(i)
-            del patr[0: 3]
-            aux.clear()
+        #def guess_type(notes):
+        #    int_chord = {("3M", "5J"): "Mayor", ("3m", "5J"): "Menor", ("3M", "5Aum"): "Aumentado",
+        #                    ("3m", "5Dim"): "Disminuido"}
+        #    distances = []
+        #    a = Interval(notes[0], notes[1], "Up")
+        #    b = Interval(notes[0], notes[2], "Up")
+        #    distances.append(a.distance())
+        #    distances.append(b.distance())
+        #    distances = tuple(distances)
+        #    return int_chord[distances]
 
-        for i in range(len(self.notes)):
-            guess_notes()
-            i = Chord(chordnotes[0], guess_type(chordnotes), "Ef")
-            grades.append(i)
-            move_patr()
-            chordnotes.clear()
+        #def move_patr():
+        #    for i in patr:
+        #        aux.append((i + 1) % 7)
+        #    for i in aux:
+        #        patr.append(i)
+        #    del patr[0: 3]
+        #    aux.clear()
+
+        #for i in range(len(self.notes)):
+        #    guess_notes()
+        #    i = Chord(chordnotes[0], guess_type(chordnotes), "Ef")
+        #    grades.append(i)
+        #    move_patr()
+        #    chordnotes.clear()
 
         return grades
 
@@ -165,6 +176,10 @@ class Scale:
 
 class Chord:
     """Soon after Bach arranged the notes by thirds, and he was pleased, so he called them "chords" """
+
+    #Este diccionario va acá me parece...
+    int_chord = {("3M", "5J"): "Mayor", ("3m", "5J"): "Menor", ("3M", "5Aum"): "Aumentado",
+                        ("3m", "5Dim"): "Disminuido"}
 
     def __init__(self, root, type, p):
         self.root = Note(root)
@@ -190,11 +205,14 @@ class Chord:
         for n in self.notes:
             n.transpose(i, d)
 
+    #Mudo la función acá y la escribo más pequeña...
+    def guess_type(notes):
+        a = Interval(notes[0], notes[1], "Up")
+        b = Interval(notes[0], notes[2], "Up")
+        return Chord.int_chord[(a.distance(), b.distance())]
 
     def __str__(self):
         m = "Mis notas dicen: " + "\n"
         for i in range(len(self.notes)):
             m += str(self.notes[i]) + "\n"
         return m
-
-
