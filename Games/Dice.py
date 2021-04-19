@@ -74,7 +74,6 @@ def is_game(r): #Manera muy cabeza de ver si hay algun juego. Escalera olvidate,
     havefour = False
     havefive = False
     havenone = False
-    s = sum(numbers)
     c = 0
     for i in r:
         if i == 2:
@@ -96,7 +95,7 @@ def is_game(r): #Manera muy cabeza de ver si hay algun juego. Escalera olvidate,
     elif havefive:
         return "Generala"
     elif havenone:
-        if s == 15 or s == 19 or s == 20:
+        if sum(numbers) == 15 or sum(numbers) == 19 or ssum(numbers) == 20:
             return "Escalera"
     else:
         return "No game"
