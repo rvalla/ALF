@@ -73,22 +73,31 @@ def is_game(r): #Manera muy cabeza de ver si hay algun juego. Escalera olvidate,
     havethree = False
     havefour = False
     havefive = False
+    havenone = False
+    s = sum(numbers)
+    c = 0
     for i in r:
         if i == 2:
             havetwo = True
         elif i == 3:
             havethree =True
         elif i == 4:
-            havefour =True
+            havefour = True
         elif i == 5:
-            havefive =True
-
+            havefive = True
+        elif i == 1:
+            c += 1
+    if c == 5:
+        havenone = True
     if havetwo and havethree:
         return "Full"
     elif havefour:
         return "Poker"
     elif havefive:
         return "Generala"
+    elif havenone:
+        if s == 15 or s == 19 or s == 20:
+            return "Escalera"
     else:
         return "No game"
 
@@ -113,7 +122,8 @@ def pick_dice(): #Para elegir cuales te quedas
 
 
 # Esto es una garompa a modo de prueba de un posible algoritmo de juego con lo poco que hace esto por ahora
-while counter < 2:
+while counter < 3:
+    counter += 1
     roll_dice(5 - len(numbers))
     draw_dices(numbers)
     print(is_game(find_repeated()))
@@ -121,7 +131,7 @@ while counter < 2:
     a = input("Tiras de nuevo? s/n")
     if a == "n":
         break
-    counter += 1
+
 
 
 
