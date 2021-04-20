@@ -33,7 +33,8 @@ class Dice():
 		m = ""
 		for l in range(7):
 			m += self.draw_line(l)
-			m += "\n"
+			if l < 6:
+				m += "\n"
 		return m
 
 	#Una función para dibujar una sola línea del dado y poder dibujar varios dados después...
