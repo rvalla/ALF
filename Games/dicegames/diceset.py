@@ -28,7 +28,7 @@ class DiceSet():
     #Las funciones para hacer trampa (con todos o algunos)
     def set_all(self, values):
         for v in range(len(values)):
-            self.dice[v].set(values[v])
+            self.set_one(v, values[v])
 
     def set_some(self, values, dice_list):
         for v, d in zip(values, dice_list):
@@ -36,11 +36,12 @@ class DiceSet():
 
     def set_one(self, d, v):
         self.dice[d].set(v)
+        self.update_vector_position(self.dice[d]) #Actualizamos el vector con la nueva información del dado que cambia
 
     #Las funciones para tirar los dados (todos o algunos)
     def roll_all(self):
-        for d in self.dice:
-            d.roll()
+        for d in range(len(self.dice)):
+            self.roll_one(d)
 
     def roll_some(self, dice_list):
         for d in dice_list:
@@ -48,6 +49,12 @@ class DiceSet():
 
     def roll_one(self, d):
         self.dice[d].roll()
+        self.update_vector_position(self.dice[d])  #Actualizamos el vector con la nueva información del dado que cambia
+
+    #La función que actualiza un dado en el vector eliminando el valor viejo y agregando el nuevo.
+    def update_vector_position(self, dice):
+        self.vector[dice.old_value - 1] -= 1 #Eliminamos el registro del valor anterior
+        self.vector[dice.value - 1] += 1 #Registramos el nuevo valor
 
     #Una función para devolver los valores del conjunto de dados
     def get_dice_values(self):
@@ -56,5 +63,9 @@ class DiceSet():
             values.append(d.value)
         return values
 
+    #Esta función sólo crea el vector con 0s del tamaño que le digas (por si en algún momento hay dados con más caras)
     def get_new_vector(self, n):
-        return [0 for i in range(n)]
+        vector = [0 for i in range(n)]
+        for d in self.dice:
+            vector[d.value - 1] += 1 #Acá guardamos el estado del conjunto de dados (ojo con la posición 0)
+        return vector
