@@ -5,10 +5,13 @@ from diceset import DiceSet
 print("-- Vamos con Dice:", end="\n")
 d = Dice()
 print(d)
+print("Mi old value is: " + str(d.old_value))
 d.roll()
 print(d)
+print("Mi old value is: " + str(d.old_value))
 d.set(3)
 print(d)
+print("Mi old value is: " + str(d.old_value))
 print("", end="\n")
 
 print("-- Vamos con DiceSet:", end="\n")

@@ -18,10 +18,13 @@ class Dice():
                 5: [empty, border, double_mark, center_mark, double_mark, border, empty],
                 6: [empty, border, double_mark, double_mark, double_mark, border, empty]}
 
+    last2 = [0]
+
     #El estado del dado consiste en un número y una lista de líneas para dibujarlo.
     def __init__(self):
         self.value = rd.randint(1,6)
         self.lines = self.get_dice_lines()
+        self.old_value = 0
 
     #Una función para actualizar la lista de líneas. Tener en cuenta que el diccionario faces y las distintas líneas
     #(empty, border, etc.) son compartidos por todas las intancias de la clase.
@@ -43,10 +46,13 @@ class Dice():
 
     #Una función para hacer trampa
     def set(self, n):
+        self.old_value = self.value
         self.value = n
         self.lines = self.get_dice_lines()
 
+
     #La función para tirar el dado
     def roll(self):
+        self.old_value = self.value
         self.value = rd.randint(1,6)
         self.lines = self.get_dice_lines()
