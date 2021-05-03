@@ -41,15 +41,20 @@ class DiceSet():
     #Las funciones para tirar los dados (todos o algunos)
     def roll_all(self):
         for d in range(len(self.dice)):
-            self.roll_one(d)
+            self.roll_some(d)
 
-    def roll_some(self, dice_list):
-        for d in dice_list:
-            self.roll_one(d)
+    def roll_some(self, *args):
+        for i in args:
+            self.dice[i].roll()
+            self.update_vector_position(self.dice[i])
 
-    def roll_one(self, d):
-        self.dice[d].roll()
-        self.update_vector_position(self.dice[d])  #Actualizamos el vector con la nueva información del dado que cambia
+    #def roll_some(self, dice_list):
+     #   for d in dice_list:
+      #      self.roll_one(d)
+
+    #def roll_one(self, d):
+     #   self.dice[d].roll()
+      #  self.update_vector_position(self.dice[d])  #Actualizamos el vector con la nueva información del dado que cambia
 
     #La función que actualiza un dado en el vector eliminando el valor viejo y agregando el nuevo.
     def update_vector_position(self, dice):
