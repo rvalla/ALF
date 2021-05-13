@@ -9,8 +9,14 @@ class GeneralaScore:
         self.table = self.create_table()
 
     def create_table(self):
-        table = dict.fromkeys(self.col1, [0 for i in range(len(self.players))])
-        table["Game"] = self.players
+        table = dict.fromkeys(self.col1, 0)
+        print(table)
+        for r in self.col1:
+            if r == "Game":
+                table[r] = self.players
+            else:
+                table[r] = [0,0,0]
+        print(table)
         return table
 
     def input(self, p, g, n):# Me hace quilombo, da el valor n a todos los juegos
@@ -31,6 +37,9 @@ class GeneralaScore:
 a = GeneralaScore("Rodri", "Augusto", "ALF")
 print(a)
 a.input("Rodri", 1, 4)
+a.input("Rodri", "Poker", 40)
+a.input("Rodri", 5, 10)
+a.input("Augusto", 3, 9)
+a.input("ALF", 2, 4)
+a.input("ALF", "Generala", 50)
 print(a)
-
-
