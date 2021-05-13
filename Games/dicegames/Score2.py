@@ -10,13 +10,11 @@ class GeneralaScore:
 
     def create_table(self):
         table = dict.fromkeys(self.col1, 0)
-        print(table)
         for r in self.col1:
             if r == "Game":
                 table[r] = self.players
             else:
                 table[r] = [0,0,0]
-        print(table)
         return table
 
     def input(self, p, g, n):# Me hace quilombo, da el valor n a todos los juegos
