@@ -14,7 +14,7 @@ class GeneralaScore:
             if r == "Game":
                 table[r] = self.players
             else:
-                table[r] = [0,0,0]
+                table[r] = [0 for i in range(len(self.players))]
         return table
 
     def input(self, p, g, n):# Me hace quilombo, da el valor n a todos los juegos
@@ -32,7 +32,7 @@ class GeneralaScore:
             l += "\n"
         return l
 
-a = GeneralaScore("Rodri", "Augusto", "ALF")
+a = GeneralaScore("Rodri", "Augusto", "ALF", "Pepe")
 print(a)
 a.input("Rodri", 1, 4)
 a.input("Rodri", "Poker", 40)

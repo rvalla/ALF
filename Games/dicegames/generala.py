@@ -52,9 +52,10 @@ class Generala():
     def __str__(self):
         m = ""
         for l in range(13):
-            print(l)
+            print(l) # Este no entiendo bien para que está
             m += self.plays_names[l] + " "
             m += self.draw_line(l)
             if l < 12:
                 m += "\n"
         return m
+
