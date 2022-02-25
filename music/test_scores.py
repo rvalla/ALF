@@ -1,22 +1,23 @@
 import randommelodies as rmel
 from scores import m21Score as m21
 
-title = "Esta melodía te vuela la cabeza"
-composer = "Juan Pitón del Bosque"
+title = "Matriz Gruppen"
+composer = "Stockhausen"
 
 #El constructor de la clase m21Score recibe los metadatos y la armadura de clave (entero),
 #el compás (string) y la cantidad de partes.
-score = m21(title, composer, 3, "4/4", 3)
-
-#Ahora vamos a probar si realmente funciona.
-score.add_notes_to_part(rmel.random_stream(25, 6, 58, 72), 0)
-score.add_notes_to_part(rmel.control_stream(20, 2, [48,52,55,48,48]), 1)
+score = m21(title, composer, 0, "3/4", 12)
 
 #Tenemos que probar las funciones propias de nuestro nuevo objeto
-pitches = [-1,36,37,38,39,40,41,-1]
-durations = [1,0.5,0.25,0.5,0.25,1,1,1]
-score.create_pitches_in_part(pitches, 0.25, 2)
-score.create_notes_in_part(pitches, durations, 2)
+pitches = [1,9,2,11,10,0,6,4,5,8,3,7]
+durations = [0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25]
+distances = [0,4,-5,3,1,-2,6,2,-1,-3,5,-4]
+for i in range(12):
+	p = []
+	for n in range(12):
+		pitch = 60 + pitches[n] + distances[i]
+		p.append(pitch)
+	score.create_pitches_in_part(p, 0.25, i)
 
 print(score)
 
@@ -24,4 +25,4 @@ print(score)
 score.show_score()
 
 #Incluso podemos guardarla
-score.save_score("testing/", "a_test.xml", "xml")
+#score.save_score("testing/", "a_test.xml", "xml")
