@@ -1,5 +1,6 @@
 from music21 import *
 import randommelodies as rm
+import random as rd
 import melodies
 
 the_list = [4,6,8,6,4,3,
@@ -21,8 +22,19 @@ the_list_4 = [7, 7, 3, 4, 3, 10, 8, 5, 12, 6, 9, 6, 7, 9, 4, 10]
 
 center = 60
 
-s = melodies.get_tuplet([0,-1,2,4,5],center,2,"eighth")
-s.append(melodies.get_tuplet([0,1,2],center,1,"eighth"))
-s.append(melodies.get_tuplet([0,1,2,4,5,6,5,4,5,3,3,1,0],center,1,"16th"))
+bases = ["eighth","16th","32nd","64th"]
+factor = [2,4,8,16]
+notes = [-1,0,1,2,3,4,5,6,7,8,9,10,11]
+
+s = stream.Stream()
+s.append(meter.TimeSignature('3/4'))
+s.append(tempo.MetronomeMark(number=34))
+for i in range(25):
+	size = rd.choice([3,5,6,7,9,10,11,13,14,15,16,17,19,21,23])
+	n = []
+	for v in range(size):
+		n.append(rd.choice(notes))
+	denominator, type = melodies.get_denominator_and_type(len(n))
+	s.append(melodies.get_tuplet(center,n,denominator,type))
 
 s.show()

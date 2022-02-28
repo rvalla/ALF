@@ -20,9 +20,8 @@ def get_duration_values(count):
 	return durations_list
 
 #Functions to create tuplet
-def get_tuplet(notes, center, base, type):
-	d = duration.Duration(base)
-	t = duration.Tuplet(len(notes), base)
+def get_tuplet(center, notes, denominator, type):
+	t = duration.Tuplet(len(notes), denominator, type)
 	s = stream.Stream()
 	for n in notes:
 		if not n == -1:
@@ -33,3 +32,15 @@ def get_tuplet(notes, center, base, type):
 		new_note.duration.type = type
 		s.append(new_note)
 	return s
+
+def get_denominator_and_type(note_count):
+	if note_count < 4:
+		return 2, "eighth"
+	elif note_count < 8:
+		return 4, "16th"
+	elif note_count < 16:
+		return 8, "32nd"
+	elif note_count < 32:
+		return 16, "64th"
+	else:
+		return 32, "128th"

@@ -1,23 +1,29 @@
 import randommelodies as rmel
 from scores import m21Score as m21
+import random as rd
 
-title = "Matriz Gruppen"
-composer = "Stockhausen"
+title = "Homenaje a Ferneyhough"
+composer = "Complex Ity"
 
 #El constructor de la clase m21Score recibe los metadatos y la armadura de clave (entero),
 #el compás (string) y la cantidad de partes.
-score = m21(title, composer, 0, "3/4", 12)
+score = m21(title, composer, 0, "3/4", 4)
 
-#Tenemos que probar las funciones propias de nuestro nuevo objeto
-pitches = [1,9,2,11,10,0,6,4,5,8,3,7]
-durations = [0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25]
-distances = [0,4,-5,3,1,-2,6,2,-1,-3,5,-4]
-for i in range(12):
-	p = []
-	for n in range(12):
-		pitch = 60 + pitches[n] + distances[i]
-		p.append(pitch)
-	score.create_pitches_in_part(p, 0.25, i)
+notes = [-1,-1,-1,-1,0,0,0,0,0,2,2,4,4,4,4,5,6,7,7,7,7,7,9,9,10,11]
+sizes = [3,3,3,5,5,5,6,6,6,7,9,10,11]
+
+for i in range(score.parts_count):
+	for t in range(30):
+		if rd.random() < 0.65:
+			size = rd.choice(sizes)
+			n = [(rd.choice(notes) + 79 - i * 12) for j in range(size)]
+			score.create_tuplet_in_part(n, i)
+		else:
+			size = rd.choice([1,1,1,2,2,2,4])
+			n = [(rd.choice(notes) + 79 - i * 12) for j in range(size)]
+			d = [1 / size for j in range(size)]
+			score.create_notes_in_part(n, d, i)
+
 
 print(score)
 

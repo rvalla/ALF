@@ -42,6 +42,19 @@ class m21Score():
 		except:
 			print("-- Explotion. Something went wrong...")
 
+	#Functions to create tuplet
+	def create_tuplet_in_part(self, notes, part):
+		denominator, type = self.get_denominator_and_type(len(notes))
+		t = duration.Tuplet(len(notes), denominator, type)
+		for n in notes:
+			if not n == -1:
+				new_note = note.Note(n)
+			else:
+				new_note = note.Rest()
+			new_note.duration.appendTuplet(t)
+			new_note.duration.type = type
+			self.parts[part].append(new_note)
+
 	#A function to add a list of notes
 	def create_notes_in_part(self, midi_vs, duration_vs, part):
 		for m, d in zip(midi_vs, duration_vs):
@@ -73,3 +86,15 @@ class m21Score():
 		for p in self.parts:
 			notes += len(p) - 2
 		return str(notes)
+
+	def get_denominator_and_type(self, note_count):
+		if note_count < 4:
+			return 2, "eighth"
+		elif note_count < 8:
+			return 4, "16th"
+		elif note_count < 16:
+			return 8, "32nd"
+		elif note_count < 32:
+			return 16, "64th"
+		else:
+			return 32, "128th"
